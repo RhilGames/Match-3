@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Gem : MonoBehaviour
 {
+    [HideInInspector]
+    public Vector2Int posIndex;
+    [HideInInspector]
+    public Board board;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +19,11 @@ public class Gem : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetUpGem(Vector2Int pos, Board theBoard)
+    {
+        posIndex = pos;
+        board = theBoard;
     }
 }

@@ -15,10 +15,13 @@ public class Board : MonoBehaviour
 
     //creating an array of gems
     public Gem[] gems;
-    
-    // Start is called before the first frame update
+    //store x and y positions
+    public Gem[,] allGems;
+
+        // Start is called before the first frame update
     void Start()
     {
+        allGems = new Gem[width, height];
         Setup();
     }
 
@@ -49,8 +52,11 @@ public class Board : MonoBehaviour
     private void SpawnGem(Vector2Int pos, Gem gemToSpawn)
     {
         Gem gem = Instantiate(gemToSpawn, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
-        gem.transform.parent = this.transform;
+        gem.transform.parent = transform;
         //listing each gems position
         gem.name = "Gem = " + pos.x + ", " + pos.y;
+        allGems[pos.x, pos.y] = gem;
+
+        gem.SetUpGem(pos, this);
     }
 }
