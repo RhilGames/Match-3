@@ -12,6 +12,9 @@ public class Board : MonoBehaviour
     
     //creating a reference to tile prefab
     public GameObject bgTilePrefab;
+
+    //creating an array of gems
+    public Gem[] gems;
     
     // Start is called before the first frame update
     void Start()
@@ -32,7 +35,22 @@ public class Board : MonoBehaviour
                 bgTile.transform.parent = transform;
                 //listing each tile by which position they hold in coordinates
                 bgTile.name = "BG Tile - " + x + ", " + y;
+
+                //creating a random number for gem to use
+                int gemToUse = Random.Range(0, gems.Length);
+
+                //sends random number and current position to spawn a gem in that location
+                SpawnGem(new Vector2Int(x, y), gems[gemToUse]);
             }
         }
+    }
+
+    //Putting different gems into locations
+    private void SpawnGem(Vector2Int pos, Gem gemToSpawn)
+    {
+        Gem gem = Instantiate(gemToSpawn, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+        gem.transform.parent = this.transform;
+        //listing each gems position
+        gem.name = "Gem = " + pos.x + ", " + pos.y;
     }
 }

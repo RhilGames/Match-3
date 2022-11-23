@@ -239,6 +239,12 @@ MonoBehaviour:
   width: 7
   height: 7
   bgTilePrefab: {fileID: 7734288001424554582, guid: c8e1e4234d9e7ce49b135a3a010ee3bc, type: 3}
+  gems:
+  - {fileID: 6901264569067190734, guid: 81ece3a6a37566a4b85c89c98bfbd04c, type: 3}
+  - {fileID: 51099209444341103, guid: 3c057cdbbc4cb694e9eef5a8bc89a1ac, type: 3}
+  - {fileID: 1037657858603525622, guid: 144a21713495047458d0b08a1deb858f, type: 3}
+  - {fileID: 6398525607137386177, guid: b8715b03176c67948be67d235453bf41, type: 3}
+  - {fileID: 836676566331551085, guid: 69d005148b11b8d4081bff79336938c6, type: 3}
 --- !u!4 &675505389
 Transform:
   m_ObjectHideFlags: 0
