@@ -56,6 +56,13 @@ public class Board : MonoBehaviour
                 //creating a random number for gem to use
                 int gemToUse = Random.Range(0, gems.Length);
 
+                int iterations = 0;
+                while(MatchesAt(new Vector2Int(x,y), gems[gemToUse]) && iterations < 100)
+                {
+                    gemToUse = Random.Range(0, gems.Length);
+                    iterations++;
+                }
+
                 //sends random number and current position to spawn a gem in that location
                 SpawnGem(new Vector2Int(x, y), gems[gemToUse]);
             }
@@ -72,5 +79,25 @@ public class Board : MonoBehaviour
         allGems[pos.x, pos.y] = gem;
 
         gem.SetUpGem(pos, this);
+    }
+
+    bool MatchesAt(Vector2Int posToCheck, Gem gemToCheck)
+    {
+        if(posToCheck.x > 1)
+        {
+            if(allGems[posToCheck.x - 1, posToCheck.y] == gemToCheck.type && allGems[posToCheck.x - 2, posToCheck.y] == gemToCheck.type)
+            {
+                return true;
+            }
+        }
+        if (posToCheck.y > 1)
+        {
+            if (allGems[posToCheck.x, posToCheck.y - 1] == gemToCheck.type && allGems[posToCheck.x, posToCheck.y - 2] == gemToCheck.type)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
