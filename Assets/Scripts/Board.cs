@@ -122,5 +122,71 @@ public class Board : MonoBehaviour
                 DestoryMatchedGemAt(matchFind.currentMatches[i].posIndex);
             }
         }
+
+        StartCoroutine(DecreaseRowCo());
+    }
+
+    private IEnumerator DecreaseRowCo()
+    {
+        yield return new WaitForSeconds(.2f);
+
+        int nullCounter = 0;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                if(allGems[x,y] == null)
+                {
+                    nullCounter++;
+                }
+                else if(nullCounter > 0)
+                {
+                    allGems[x, y].posIndex.y -= nullCounter;
+                    allGems[x, y- nullCounter] = allGems[x, y];
+                    allGems[x, y] = null;
+                }
+
+            }
+
+            nullCounter = 0;
+        }
+
+        StartCoroutine(FillBoardCo());
+    }
+
+    private IEnumerator FillBoardCo()
+    {
+        yield return new WaitForSeconds(.5f);
+
+        RefillBoard();
+
+        yield return new WaitForSeconds(.5f);
+
+        matchFind.FindAllMatches();
+
+        if(matchFind.currentMatches.Count > 0)
+        {
+            yield return new WaitForSeconds(1.5f);
+            DestroyMatches();
+        }
+
+    }
+
+    private void RefillBoard()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                if (allGems[x, y] == null)
+                {
+                    int gemToUse = Random.Range(0, gems.Length);
+
+                    SpawnGem(new Vector2Int(x, y), gems[gemToUse]);
+                }
+            }
+        }
+
     }
 }
