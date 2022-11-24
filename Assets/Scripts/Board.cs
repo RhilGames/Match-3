@@ -85,19 +85,42 @@ public class Board : MonoBehaviour
     {
         if(posToCheck.x > 1)
         {
-            if(allGems[posToCheck.x - 1, posToCheck.y] == gemToCheck.type && allGems[posToCheck.x - 2, posToCheck.y] == gemToCheck.type)
+            if (allGems[posToCheck.x - 1, posToCheck.y].type == gemToCheck.type && allGems[posToCheck.x - 2, posToCheck.y].type == gemToCheck.type)
             {
                 return true;
             }
         }
         if (posToCheck.y > 1)
         {
-            if (allGems[posToCheck.x, posToCheck.y - 1] == gemToCheck.type && allGems[posToCheck.x, posToCheck.y - 2] == gemToCheck.type)
+            if (allGems[posToCheck.x, posToCheck.y - 1].type == gemToCheck.type && allGems[posToCheck.x, posToCheck.y - 2].type == gemToCheck.type)
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void DestoryMatchedGemAt(Vector2Int pos)
+    {
+        if(allGems[pos.x, pos.y] != null)
+        {
+            if(allGems[pos.x, pos.y].isMatched)
+            {
+                Destroy(allGems[pos.x,pos.y].gameObject);
+                allGems[pos.x, pos.y] = null;
+            }
+        }
+    }
+
+    public void DestroyMatches()
+    {
+        for(int i = 0; i < matchFind.currentMatches.Count; i++)
+        {
+            if(matchFind.currentMatches[i] != null)
+            {
+                DestoryMatchedGemAt(matchFind.currentMatches[i].posIndex);
+            }
+        }
     }
 }
