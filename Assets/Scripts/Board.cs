@@ -18,6 +18,8 @@ public class Board : MonoBehaviour
     //store x and y positions
     public Gem[,] allGems;
 
+    public float gemSpeed;
+
         // Start is called before the first frame update
     void Start()
     {

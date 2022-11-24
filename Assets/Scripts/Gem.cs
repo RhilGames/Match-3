@@ -15,6 +15,8 @@ public class Gem : MonoBehaviour
     private bool mousePressed;
     private float swipeAngle = 0;
 
+    private Gem otherGem;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,16 @@ public class Gem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Vector2.Distance(transform.position, posIndex) > .01f)
+        {
+            transform.position = Vector2.Lerp(transform.position, posIndex, board.gemSpeed * Time.deltaTime);
+        }
+        else
+        {
+            transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
+            board.allGems[posIndex.x, posIndex.y] = this;
+        }
+
         if(mousePressed && Input.GetMouseButtonUp(0))
         {
             mousePressed = false;
@@ -49,5 +61,41 @@ public class Gem : MonoBehaviour
     {
         swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x);
         swipeAngle = swipeAngle * 180 / Mathf.PI;
+
+        if(Vector3.Distance(firstTouchPosition, finalTouchPosition) > .5f)
+        {
+            MovePieces();
+        }
+    }
+
+    private void MovePieces()
+    {
+        if(swipeAngle < 45 && swipeAngle > -45 && posIndex.x < board.width - 1)
+        {
+            otherGem = board.allGems[posIndex.x + 1, posIndex.y];
+            otherGem.posIndex.x--;
+            posIndex.x++;
+        }
+        else if (swipeAngle >45 && swipeAngle <= 135 && posIndex.y < board.height + 1)
+        {
+            otherGem = board.allGems[posIndex.x, posIndex.y + 1];
+            otherGem.posIndex.y--;
+            posIndex.y++;
+        }
+        else if (swipeAngle < -45 && swipeAngle >= -135 && posIndex.y > 0)
+        {
+            otherGem = board.allGems[posIndex.x, posIndex.y - 1];
+            otherGem.posIndex.y++;
+            posIndex.y--;
+        }
+        else if (swipeAngle > 135 && posIndex.x > 0 || swipeAngle < -135 && posIndex.x > 0)
+        {
+            otherGem = board.allGems[posIndex.x - 1, posIndex.y];
+            otherGem.posIndex.x++;
+            posIndex.x--;
+        }
+
+        board.allGems[posIndex.x, posIndex.y] = this;
+        board.allGems[otherGem.posIndex.x, otherGem.posIndex.y] = otherGem;
     }
 }

@@ -245,6 +245,7 @@ MonoBehaviour:
   - {fileID: 1037657858603525622, guid: 144a21713495047458d0b08a1deb858f, type: 3}
   - {fileID: 6398525607137386177, guid: b8715b03176c67948be67d235453bf41, type: 3}
   - {fileID: 836676566331551085, guid: 69d005148b11b8d4081bff79336938c6, type: 3}
+  gemSpeed: 7
 --- !u!4 &675505389
 Transform:
   m_ObjectHideFlags: 0
