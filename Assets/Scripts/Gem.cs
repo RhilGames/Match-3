@@ -17,6 +17,13 @@ public class Gem : MonoBehaviour
 
     private Gem otherGem;
 
+    public enum GemType { blue, green, red, yellow, purple}
+    public GemType type;
+
+    public bool isMatched;
+    [HideInInspector]
+    private Vector2Int previousPos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,6 +77,8 @@ public class Gem : MonoBehaviour
 
     private void MovePieces()
     {
+        previousPos = posIndex;
+
         if(swipeAngle < 45 && swipeAngle > -45 && posIndex.x < board.width - 1)
         {
             otherGem = board.allGems[posIndex.x + 1, posIndex.y];
@@ -97,5 +106,27 @@ public class Gem : MonoBehaviour
 
         board.allGems[posIndex.x, posIndex.y] = this;
         board.allGems[otherGem.posIndex.x, otherGem.posIndex.y] = otherGem;
+
+        StartCoroutine(CheckMoveCo());
+    }
+
+    public IEnumerator CheckMoveCo()
+    {
+        yield return new WaitForSeconds(.5f);
+
+        board.matchFind.FindAllMatches();
+
+        if(otherGem != null)
+        {
+            if(!isMatched && !otherGem.isMatched)
+            {
+                otherGem.posIndex = posIndex;
+                posIndex = previousPos;
+
+                board.allGems[posIndex.x, posIndex.y] = this;
+                board.allGems[otherGem.posIndex.x, otherGem.posIndex.y] = otherGem;
+
+            }
+        }
     }
 }
