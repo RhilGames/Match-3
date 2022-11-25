@@ -22,6 +22,9 @@ public class Board : MonoBehaviour
 
     public MatchFinder matchFind;
 
+    public enum BoardState { wait, move }
+    public BoardState currentState = BoardState.move;
+
     private void Awake()
     {
         matchFind = FindObjectOfType<MatchFinder>();
@@ -36,7 +39,7 @@ public class Board : MonoBehaviour
 
     void Update()
     {
-        matchFind.FindAllMatches();
+        //matchFind.FindAllMatches();
     }
 
     //Creating a grid and filling it with the prefab tile
@@ -72,7 +75,7 @@ public class Board : MonoBehaviour
     //Putting different gems into locations
     private void SpawnGem(Vector2Int pos, Gem gemToSpawn)
     {
-        Gem gem = Instantiate(gemToSpawn, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+        Gem gem = Instantiate(gemToSpawn, new Vector3(pos.x, pos.y + height, 0f), Quaternion.identity);
         gem.transform.parent = transform;
         //listing each gems position
         gem.name = "Gem = " + pos.x + ", " + pos.y;
@@ -167,8 +170,13 @@ public class Board : MonoBehaviour
 
         if(matchFind.currentMatches.Count > 0)
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(.5f);
             DestroyMatches();
+        }
+        else
+        {
+            yield return new WaitForSeconds(.5f);
+            currentState = BoardState.move;
         }
 
     }
@@ -187,6 +195,28 @@ public class Board : MonoBehaviour
                 }
             }
         }
+        CheckMisplaceGems();
+    }
 
+    private void CheckMisplaceGems()
+    {
+        List<Gem> foundGems = new List<Gem>();
+        foundGems.AddRange(FindObjectsOfType<Gem>());
+
+        for (int x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                if(foundGems.Contains(allGems[x, y]))
+                {
+                    foundGems.Remove(allGems[x, y]);
+                }
+            }
+        }
+
+        foreach(Gem g in foundGems)
+        {
+            Destroy(g.gameObject);
+        }
     }
 }
