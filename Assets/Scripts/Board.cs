@@ -28,9 +28,16 @@ public class Board : MonoBehaviour
     public Gem bomb;
     public float bombChance = 2f;
 
+    [HideInInspector]
+    public RoundManager roundMan;
+
+    private float bonusMulti;
+    public float bonusAmount = .5f;
+
     private void Awake()
     {
         matchFind = FindObjectOfType<MatchFinder>();
+        roundMan = FindObjectOfType<RoundManager>();
     }
 
         // Start is called before the first frame update
@@ -137,6 +144,8 @@ public class Board : MonoBehaviour
         {
             if(matchFind.currentMatches[i] != null)
             {
+                ScoreCheck(matchFind.currentMatches[i]);
+                
                 DestoryMatchedGemAt(matchFind.currentMatches[i].posIndex);
             }
         }
@@ -185,6 +194,8 @@ public class Board : MonoBehaviour
 
         if(matchFind.currentMatches.Count > 0)
         {
+            bonusMulti++;
+
             yield return new WaitForSeconds(.5f);
             DestroyMatches();
         }
@@ -192,6 +203,8 @@ public class Board : MonoBehaviour
         {
             yield return new WaitForSeconds(.5f);
             currentState = BoardState.move;
+
+            bonusMulti = 0;
         }
 
     }
@@ -272,6 +285,17 @@ public class Board : MonoBehaviour
             }
 
             StartCoroutine(FillBoardCo());
+        }
+    }
+
+    public void ScoreCheck(Gem gemToCheck)
+    {
+        roundMan.currentScore += gemToCheck.scoreValue;
+
+        if(bonusMulti > 0)
+        {
+            float bonusToAdd = gemToCheck.scoreValue * bonusMulti * bonusAmount;
+            roundMan.currentScore += Mathf.RoundToInt(bonusToAdd);
         }
     }
 }
