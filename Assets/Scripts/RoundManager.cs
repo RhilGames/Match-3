@@ -94,5 +94,7 @@ public class RoundManager : MonoBehaviour
         {
             uiMan.winText.text = "Sorry, you failed to get a star! Try Again?";
         }
+
+        SFXManager.instance.PlayRoundOver();
     }
 }
